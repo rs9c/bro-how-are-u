@@ -67,7 +67,7 @@ _待补充_
 ### 前端
 
 ```sh
-cd frontend/ & npm run build
+cd frontend & npm run build
 ```
 
 ### 后端
