@@ -20,9 +20,9 @@
 > **预期成果**
 > ①可运行的软件原型；②结题报告。
 
-## 调试
+## 开发
 
-本项目主要目录：
+### 主要目录
 
 ```sh
 bro-how-are-u/
@@ -34,51 +34,17 @@ bro-how-are-u/
 
 ### 前端
 
-> [![node](https://img.shields.io/badge/node-v26.3.0-5FA04E?style=flat-square&logo=nodedotjs&logoColor=white)](https://nodejs.org/)
-
-1. 进入前端工作目录
-
-```sh
-cd frontend
-```
-
-2. 安装所需依赖
-
-```sh
-npm install
-```
-
-3. 开始调试
-
-```sh
-npm run dev
-```
-
-默认为http://0.0.0.0:5501
+转到 [frontend/README.md](frontend/README.md)
 
 ### 后端
 
-> [![python](https://img.shields.io/badge/python-v3.13.15-3776AB?style=flat-square&logo=python&logoColor=white)](https://www.python.org/)
-
-_待补充_
-
-## 构建
-
-### 前端
-
-```sh
-cd frontend & npm run build
-```
-
-### 后端
-
-_待补充_
+转到 [backend/README.md](backend/README.md)
 
 ## 项目团队成员
 
 - [林间梦](https://github.com/forest651)（队长）
 - [再也不吃江津米花糖]()
-- [我也要大战屎山代码吗]()
+- [我也要大战屎山代码吗](https://github.com/superKARi2230)
 - [RISINGSUN517](https://github.com/rs9c)
 
 ## 致谢

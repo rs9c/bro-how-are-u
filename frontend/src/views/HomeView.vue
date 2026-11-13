@@ -20,6 +20,7 @@ import {
     NCard,
 } from "naive-ui";
 import { ResizeImage24Regular, ResizeVideo24Regular } from "@vicons/fluent";
+import { API_URL } from "@/config";
 
 const message = useMessage();
 
@@ -34,7 +35,7 @@ const moreOptions = [
     },
 
     {
-        label: "你还想要什么",
+        label: "连通性测试",
         key: "2",
     },
 ];
@@ -44,8 +45,28 @@ function handleMoreOptionSelected(key) {
             window.open("https://github.com/rs9c/bro-how-are-u");
             break;
         case "2":
-            message.info("所以你还想要什么啊？");
+            handlePingTest();
             break;
+    }
+}
+async function handlePingTest() {
+    try {
+        const resp1 = await fetch(`${API_URL}/ping`);
+        const data1 = await resp1.json();
+        message[resp1.ok ? "info" : "warning"](data1.msg);
+        const resp2 = await fetch(`${API_URL}/ping`, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+                req: "Ping",
+                repeat: 3,
+            }),
+        });
+        const data2 = await resp2.json();
+        message[resp2.ok ? "info" : "warning"](data2.msg);
+    } catch (e) {
+        message.error("无法连通后端服务！");
+        console.error(API_URL);
     }
 }
 // 以下是图片、视频处理逻辑，目前不可用

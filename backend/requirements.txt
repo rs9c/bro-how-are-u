@@ -1,0 +1,6 @@
+# ===== Web 核心 =====
+fastapi[standard]
+
+# ===== 图像处理与计算 =====
+opencv-python
+numpy
