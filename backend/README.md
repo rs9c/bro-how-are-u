@@ -11,7 +11,6 @@ backend/
 ├── app/                # 应用主目录
 │   ├── api/            # API
 │   └── main.py         # 主入口
-├── venv/               # Python 虚拟环境
 ├── .gitignore
 ├── README.md           # 后端开发说明
 └── requirements.txt    # 依赖清单
