@@ -43,7 +43,7 @@ bro-how-are-u/
 ## 项目团队成员
 
 - [林间梦](https://github.com/forest651)（队长）
-- [再也不吃江津米花糖]()
+- [再也不吃江津米花糖](https://github.com/Phylia093)
 - [我也要大战屎山代码吗](https://github.com/superKARi2230)
 - [RISINGSUN517](https://github.com/rs9c)
 
