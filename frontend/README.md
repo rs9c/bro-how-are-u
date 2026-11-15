@@ -32,19 +32,20 @@ frontend/
 
 ```sh
 # 安装所需依赖
-cd /frontend && npm install
+cd frontend
+npm install
 ```
 
 ### 2. 后续开发
 
 ```sh
 # 启动开发服务器
-cd /frontend && npm run dev
+npm run dev
 # http://localhost:5501
 ```
 
 ### 3. 构建
 
 ```sh
-cd /frontend && npm run build
+npm run build
 ```

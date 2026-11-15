@@ -1,0 +1,10 @@
+{
+    "model": {
+        "path": "yolov8s.pt"
+    },
+    "stream": {
+        "camera": 0,
+        "max_fps": 30.0,
+        "jpg_quality": 80
+    }
+}
