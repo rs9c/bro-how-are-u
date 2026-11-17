@@ -1,6 +1,7 @@
 from pathlib import Path
 from typing import cast
 
+import numpy as np
 import torch
 from ultralytics import YOLO
 from ultralytics.engine.results import Results
@@ -16,6 +17,12 @@ _model = YOLO(_MODELS_DIR / _modelCfg["path"])
 _model.to(_DEVICE)
 
 logger.info(f"模型路径：{_MODELS_DIR / _modelCfg['path']}  设备：{_DEVICE}")
+
+_model.predict(
+    source=np.zeros((640, 640, 3), dtype=np.uint8), device=_DEVICE, verbose=False
+)
+
+logger.info("模型预热完成")
 
 
 def detect(frame):

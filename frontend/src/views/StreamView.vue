@@ -1,16 +1,17 @@
 <script setup>
-import { NCard, NButton, NIcon, NGrid, NGi, NDescriptions, NDescriptionsItem, NEllipsis, NFlex, useMessage } from "naive-ui";
+import { NSpin, NCard, NButton, NIcon, NGrid, NGi, NDescriptions, NDescriptionsItem, NEllipsis, NFlex, useMessage } from "naive-ui";
 import { ref, onUnmounted, computed } from "vue";
 import { Play16Regular, Settings16Regular, Pause16Regular, VideoOff32Regular } from "@vicons/fluent";
 import { API_URL } from "@/config";
+import { useThemeStore } from "@/stores/theme";
 
 const message = useMessage();
 const isStarted = ref(false);
 const isStarting = ref(false);
 const isPausing = ref(false);
-const outputFrame = ref("");
+const canvasRef = ref(null);
 let ws = null;
-let currentObjectURL = null;
+let drawing = false;
 const wsStartAt = ref(0);
 const now = ref(0);
 const wsDuration = computed(() => {
@@ -24,23 +25,31 @@ let frameCount = 0;
 async function handleStartBtnClicked() {
     isStarting.value = true;
     ws = new WebSocket(`${API_URL}/stream/ws`);
+    ws.binaryType = "arraybuffer";
     ws.onopen = () => {
         wsStartAt.value = Date.now();
         now.value = wsStartAt.value;
         isStarting.value = false;
         isStarted.value = true;
     };
-    ws.onmessage = (event) => {
-        if (currentObjectURL) URL.revokeObjectURL(currentObjectURL);
-        currentObjectURL = URL.createObjectURL(event.data);
-        outputFrame.value = currentObjectURL;
-        frameCount++;
+    ws.onmessage = async (event) => {
+        if (drawing) return;
+        drawing = true;
+        try {
+            const bitmap = await createImageBitmap(new Blob([event.data], { type: "image/jpeg" }));
+            canvasRef.value?.getContext("2d")?.drawImage(bitmap, 0, 0);
+            bitmap.close();
+            frameCount++;
+        } finally {
+            drawing = false;
+        }
     };
     ws.onclose = () => {
         message.info("WebSocket连接断开");
         clearInterval(fpsTimer);
         fps.value = 0;
         frameCount = 0;
+        drawing = false;
         isStarting.value = false;
         isStarted.value = false;
         isPausing.value = false;
@@ -65,10 +74,6 @@ async function handlePauseBtnClicked() {
 
 onUnmounted(() => {
     ws?.close();
-    if (currentObjectURL) {
-        URL.revokeObjectURL(currentObjectURL);
-        currentObjectURL = null;
-    }
     if (fpsTimer) clearInterval(fpsTimer);
 });
 </script>
@@ -79,33 +84,41 @@ onUnmounted(() => {
             <n-flex v-if="!isStarted" align="center" justify="center" style="height: 80%">
                 <n-icon :size="64" :component="VideoOff32Regular" />
             </n-flex>
-            <img v-else :src="outputFrame" alt="输出画面" style="width: 100%" />
+            <canvas
+                v-else
+                ref="canvasRef"
+                width="1280"
+                height="720"
+                aria-label="输出画面"
+                style="width: 100%; aspect-ratio: 16 / 9; display: block"></canvas>
         </n-card>
         <n-card title="控制台">
             <n-grid x-gap="12" :cols="2">
                 <n-gi>
-                    <n-button
-                        type="primary"
-                        :bordered="false"
-                        style="width: 100%"
-                        v-if="!isStarted"
-                        :disabled="isStarting"
-                        @click="handleStartBtnClicked">
-                        <template #icon>
-                            <n-icon>
-                                <Play16Regular />
-                            </n-icon>
-                        </template>
-                        开始
-                    </n-button>
-                    <n-button strong secondary style="width: 100%" v-else :disabled="isPausing" @click="handlePauseBtnClicked">
-                        <template #icon>
-                            <n-icon>
-                                <Pause16Regular />
-                            </n-icon>
-                        </template>
-                        停止
-                    </n-button>
+                    <n-spin :show="isStarting || isPausing" size="small" :stroke="useThemeStore().themeColor" :delay="500" style="flex: 1">
+                        <n-button
+                            type="primary"
+                            :bordered="false"
+                            style="width: 100%"
+                            v-if="!isStarted"
+                            :disabled="isStarting"
+                            @click="handleStartBtnClicked">
+                            <template #icon>
+                                <n-icon>
+                                    <Play16Regular />
+                                </n-icon>
+                            </template>
+                            开始
+                        </n-button>
+                        <n-button strong secondary style="width: 100%" v-else :disabled="isPausing" @click="handlePauseBtnClicked">
+                            <template #icon>
+                                <n-icon>
+                                    <Pause16Regular />
+                                </n-icon>
+                            </template>
+                            停止
+                        </n-button>
+                    </n-spin>
                 </n-gi>
                 <n-gi>
                     <n-button style="width: 100%">

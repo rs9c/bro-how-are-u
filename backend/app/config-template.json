@@ -4,6 +4,8 @@
     },
     "stream": {
         "camera": 0,
+        "width": 1280,
+        "height": 720,
         "max_fps": 30.0,
         "jpg_quality": 80
     }
