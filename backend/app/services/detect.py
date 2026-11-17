@@ -8,7 +8,12 @@ from ultralytics.engine.results import Results
 
 from app.services import config, logger
 
-_DEVICE = "cuda" if torch.cuda.is_available() else "cpu"
+if torch.cuda.is_available():
+    _DEVICE = "cuda"
+elif torch.backends.mps.is_available():
+    _DEVICE = "mps"
+else:
+    _DEVICE = "cpu"
 
 _MODELS_DIR = Path(__file__).resolve().parent.parent.parent / "models"
 _modelCfg: dict = config.cfg["model"]
