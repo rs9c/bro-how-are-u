@@ -6,14 +6,29 @@ const router = createRouter({
     routes: [
         {
             path: "/",
-            redirect: "/home",
-        },
-        {
-            path: "/home",
+            redirect: "/stream",
             component: () => import("@/views/HomeView.vue"),
             meta: {
                 title: "基于YOLOv8的摔倒检测与报警系统｜2026SRTP",
             },
+            children: [
+                {
+                    path: "stream",
+                    component: () => import("@/views/StreamView.vue"),
+                },
+                {
+                    path: "picture",
+                    component: () => import("@/views/PictureView.vue"),
+                },
+                {
+                    path: "video",
+                    component: () => import("@/views/VideoView.vue"),
+                },
+            ],
+        },
+        {
+            path: "/:otherPages(.*)*",
+            redirect: "/stream",
         },
     ],
 });

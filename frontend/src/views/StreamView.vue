@@ -44,8 +44,12 @@ async function handleStartBtnClicked() {
             drawing = false;
         }
     };
-    ws.onclose = () => {
-        message.info("WebSocket连接断开");
+    ws.onclose = (e) => {
+        if (e.code === 1000) {
+            message.info("WebSocket连接断开");
+        } else {
+            message.warning("WebSocket意外断开：" + e.code);
+        }
         clearInterval(fpsTimer);
         fps.value = 0;
         frameCount = 0;
@@ -53,11 +57,6 @@ async function handleStartBtnClicked() {
         isStarting.value = false;
         isStarted.value = false;
         isPausing.value = false;
-    };
-    ws.onerror = (e) => {
-        message.warn("WebSocket发生错误！" + e);
-        isStarting.value = false;
-        isStarted.value = false;
     };
     fpsTimer = setInterval(() => {
         fps.value = frameCount;
