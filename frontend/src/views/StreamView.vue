@@ -66,9 +66,7 @@ async function handleStartBtnClicked() {
 }
 async function handlePauseBtnClicked() {
     isPausing.value = true;
-    ws?.close();
-    isPausing.value = false;
-    isStarted.value = false;
+    ws?.close(1000);
 }
 
 onUnmounted(() => {
